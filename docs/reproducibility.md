@@ -9,7 +9,7 @@ All paths below are under `/blue/fsu-compsci-dept/yh26e.fsu/cop5611-dllama/` on 
 ## 1. Code
 
 - dllama commit: `59af889085c6c0316a4524a92b42f04caa4bcc6d` (upstream b4rtaz/distributed-llama)
-- Commit of our modified dllama (write "none" if unmodified): `579dc36224e90ef99412c45cf3428d7e33ea1a96` (April-guo/distributed-llama `main`; fixes the uninitialized `Tokenizer::addBos`, so BOS is always added)
+- Commit of our modified dllama (write "none" if unmodified): `4d678142653ae6b9a225897568fa2b276c791ca3` (April-guo/distributed-llama `main`; fixes the uninitialized `Tokenizer::addBos`, so BOS is always added, and feeds the last prompt token after prefill)
 - Commit of this repository:
 
 ## 2. Build
@@ -59,10 +59,10 @@ All paths below are under `/blue/fsu-compsci-dept/yh26e.fsu/cop5611-dllama/` on 
 
 ## 7. Output Length
 
-- Tokens generated per request: 128 for short outputs; 1024 for the long-output request in scenario 3
-- Stop at the end-of-sequence token or not: no, always generate exactly this many tokens (needs a small patch to `dllama-api`; not done yet)
+- Tokens generated per request: at most 128 for short outputs and at most 1024 for the long-output request in scenario 3 (`max_tokens`); the actual length is recorded
+- Stop at the end-of-sequence token or not: yes (dllama's native behavior)
 
-> If different configurations generate different lengths, their latencies cannot be compared.
+> Output lengths can differ between configurations, so TPOT uses each request's actual output length.
 
 ## 8. Workload
 
@@ -73,7 +73,7 @@ All paths below are under `/blue/fsu-compsci-dept/yh26e.fsu/cop5611-dllama/` on 
 - Trace file path: `benchmark/traces/` (to be generated)
 - Sampling seed: 42
 - Number of requests: 10 pairs per scenario (2 requests per pair)
-- Arrival process and rate: scenario 1, both requests arrive at the same time; scenarios 2 and 3, the second request arrives 1 s after the first one starts
+- Arrival process and rate: scenario 1, both requests arrive together (A is sent first and B right after it, so the FIFO order is fixed); scenarios 2 and 3, B is sent when the client receives A's 16th output token, so B always arrives while A is decoding
 
 ## 9. Measurement Method
 
