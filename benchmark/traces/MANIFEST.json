@@ -1,0 +1,20 @@
+{
+  "seed": 42,
+  "pairs_per_scenario": 10,
+  "warmup_pairs": 1,
+  "short_prompt_tokens": [
+    32,
+    256
+  ],
+  "long_prompt_tokens": 3000,
+  "short_output": 128,
+  "long_output": 1024,
+  "trigger_tokens": 16,
+  "longbench_templates": {
+    "qasper": "Read the article and answer the question as concisely as you can.\n\nArticle: {context}\n\nQuestion: {input}\n\nAnswer:",
+    "gov_report": "Read the government report and write a one-page summary of it.\n\nReport:\n{context}\n\nNow write a one-page summary of the report.\n\nSummary:"
+  },
+  "sharegpt": "/blue/fsu-compsci-dept/yh26e.fsu/cop5611-dllama/datasets/sharegpt/ShareGPT_V3_unfiltered_cleaned_split.json",
+  "longbench": "/blue/fsu-compsci-dept/yh26e.fsu/cop5611-dllama/datasets/longbench/data",
+  "tokenizer": "/blue/fsu-compsci-dept/yh26e.fsu/cop5611-dllama/models/llama3_1_8b_instruct_q40/dllama_tokenizer_llama3_1_8b_instruct_q40.t"
+}
